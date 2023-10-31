@@ -21,7 +21,7 @@ export default userService
 
 async function login(body: RequestBody): Promise<ServiceError | string> {
     try {
-
+        // Create JWT token admin if login as admin
         if (body.username == "admin" && body.password == "admin") {
             return jwt.sign({
                 username: "admin",
@@ -39,6 +39,7 @@ async function login(body: RequestBody): Promise<ServiceError | string> {
         const user: UserObject = userDb.dataValues
         if (!bcrypt.compareSync(body.password!, user.password!)) throw new Error("Wrong password")
 
+        // Generate JWT Token
         return jwt.sign({
             username: user.username,
             role: "regular"
@@ -53,6 +54,7 @@ async function login(body: RequestBody): Promise<ServiceError | string> {
 
 async function create(body: RequestBody): Promise<ServiceError> {
     try {
+        // hash the password before save to database
         const hashedPassword = bcrypt.hashSync(body.password!, 10)
         await User.create({
             username: body.username,

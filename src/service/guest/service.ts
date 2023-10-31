@@ -19,6 +19,7 @@ export default guestService
 
 async function create(body: RequestBody): Promise<ServiceError> {
     try {
+        // Make Sure all input is verified
         if (!validator.isMobilePhone(body.nomorTelepon!, 'id-ID')) throw new Error("Phone Number is not right")
         await Guest.create(body)
         return {}
@@ -32,6 +33,7 @@ async function create(body: RequestBody): Promise<ServiceError> {
 
 async function admin(): Promise<ServiceError | GuestObject[]> {
     try {
+        // Give All data when admin request
         const users = await Guest.findAll()
         return users.map(value => value.dataValues)
     } catch (error: any) {
@@ -44,6 +46,7 @@ async function admin(): Promise<ServiceError | GuestObject[]> {
 
 async function getNotes(): Promise<ServiceError | Pick<GuestObject, "nama" | "catatan">[]> {
     try {
+        // filter some columns when regular request data
         const users = await Guest.findAll()
         return users.map(value => {
             return {
