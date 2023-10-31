@@ -18,6 +18,7 @@ JWT_KEY
 
 After setting up all the environment variables, on command prompt, you can execute theese code to run the app
 ```
+npm i -g ts-node typescript
 npm i
 npm run start
 ```
