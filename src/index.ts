@@ -11,7 +11,7 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: true }))
 
 app.use("/api/v1/guest", authenticate, guestRoute)
-app.use("/api/v1/user", authenticate, userRoute)
+app.use("/api/v1/user", userRoute)
 
 
 app.listen(SERVER_PORT, () => {

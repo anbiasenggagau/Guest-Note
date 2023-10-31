@@ -2,6 +2,7 @@ import express from 'express'
 import { Response, ServiceError } from './response'
 import userService from './service'
 import { RequestBody } from './request'
+import { TokenPayload, authenticate } from '../../middleware/auth'
 
 interface Controller {
     getAll(req: express.Request<any, any, any>, res: express.Response): void
@@ -17,7 +18,7 @@ const userController: Controller = {
 
 const route = express.Router()
 
-route.get("/", userController.getAll)
+route.get("/", authenticate, userController.getAll)
 route.post("/", userController.createOne)
 route.post("/login", userController.login)
 
@@ -48,11 +49,13 @@ async function login(req: express.Request<any, any, any>, res: express.Response)
 }
 
 async function createOne(req: express.Request<any, any, any>, res: express.Response) {
+    const user: TokenPayload = req.user
     const body: RequestBody = req.body
     const response: Response = {
         message: '',
         status: ''
     }
+    if (user.role.toLowerCase() != "admin") return res.sendStatus(403)
     const error = await userService.create(body)
 
     if (error.message) {

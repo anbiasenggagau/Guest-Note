@@ -25,8 +25,8 @@ async function login(body: RequestBody): Promise<ServiceError | string> {
         if (body.username == "admin" && body.password == "admin") {
             return jwt.sign({
                 username: "admin",
-                role: "regular"
-            }, JWT_KEY!)
+                role: "admin"
+            }, JWT_KEY!, { expiresIn: "1h" })
         }
 
         const userDb = await User.findOne({
@@ -43,7 +43,7 @@ async function login(body: RequestBody): Promise<ServiceError | string> {
         return jwt.sign({
             username: user.username,
             role: "regular"
-        }, JWT_KEY!)
+        }, JWT_KEY!, { expiresIn: "1h" })
     } catch (error: any) {
         return {
             message: error.message,
